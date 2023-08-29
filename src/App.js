@@ -1,44 +1,44 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import RepairForm from './components/RepairForm';
 import ConfirmationPage from './components/ConfirmationPage';
 import StatusPage from './components/StatusPage';
 import AdminPage from './components/AdminPage';
 import { ThemeProvider } from 'styled-components';
+import { useDarkMode } from './components/useDarkMode';
 import { GlobalStyles } from './global';
 import { lightTheme, darkTheme } from './theme';
+import Toggle from './components/Toggler';
+import './styles.css';
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      theme: 'light',
-    };
+function App() {
+  const [theme, toggleTheme, componentMounted] = useDarkMode();
+  const themeMode = theme === 'light' ? lightTheme : darkTheme;
 
-    this.toggleTheme = this.toggleTheme.bind(this);
-  }
+  if (!componentMounted) {
+    return <div />
+  };
 
-  toggleTheme() {
-    this.setState({ theme: this.state.theme === 'light' ? 'dark' : 'light' });
-  }
-
-  render() {
-    return (
-      <Router>
-        <ThemeProvider theme={this.state.theme === 'light' ? lightTheme : darkTheme}>
-          <GlobalStyles />
-          <div className="App">
-            <Navbar toggleTheme={this.toggleTheme} />
-            <Route exact path="/" component={RepairForm} />
-            <Route path="/confirmation" component={ConfirmationPage} />
-            <Route path="/status" component={StatusPage} />
-            <Route path="/admin" component={AdminPage} />
-          </div>
-        </ThemeProvider>
-      </Router>
-    );
-  }
+  return (
+    <ThemeProvider theme={themeMode}>
+      <>
+        <GlobalStyles />
+        <Toggle theme={theme} toggleTheme={toggleTheme} />
+        <div className="App">
+          <Router>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<RepairForm />} />
+              <Route path="/confirmation" element={<ConfirmationPage />} />
+              <Route path="/status" element={<StatusPage />} />
+              <Route path="/admin" element={<AdminPage />} />
+            </Routes>
+          </Router>
+        </div>
+      </>
+    </ThemeProvider>
+  );
 }
 
 export default App;

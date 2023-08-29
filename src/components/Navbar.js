@@ -1,13 +1,10 @@
 import React from 'react';
 
-function Navbar({ theme, toggleTheme }) {
+function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
-                <a className="navbar-brand" href="/#">RepairHub</a>  {/* Note the href change */}
-                <button onClick={toggleTheme}>
-                    Switch Theme
-                </button>
+                <a className="navbar-brand" href="/#">RepairHub</a>
             </div>
         </nav>
     );
